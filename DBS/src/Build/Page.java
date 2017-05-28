@@ -3,6 +3,7 @@ package Build;
 import java.io.*;
 
 public final class Page {
+	private static final String FILE_NAME = "heap.txt";
 	private static final int COUNT_SIZE = 3;
 	private static int size;
 	private static int maxRecordSize;
@@ -63,7 +64,7 @@ public final class Page {
 		byte[] page = Page.page.toByteArray();
 		
 		//write to file on disk
-		writeToRandomAccessFile("heap.txt", Page.size*Page.pageID, page);
+		writeToRandomAccessFile(FILE_NAME, Page.size*Page.pageID, page);
 		
 	}
 	

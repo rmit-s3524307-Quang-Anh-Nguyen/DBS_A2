@@ -4,11 +4,12 @@ import java.nio.charset.*;
 import java.nio.file.*;
 
 public class Build {
+	public static final String FILE_NAME = "ped.csv";
 	private static int max = 0;
 	final static int HOURLY_COUNTS_COLUMN = 9;
 	public static void main(String[] args) throws Exception {
 		//get the path
-		Path pathToFile = Paths.get("ped.csv");
+		Path pathToFile = Paths.get(FILE_NAME);
 
 		//setting page size
 		if (args[0].equals("0")){
@@ -59,5 +60,39 @@ public class Build {
 		
 		//write the last page to file
 		Page.finishPage();
+
+		
+//		for (int i=0; i<Btree.nodeNumber;i++){
+//			childRead(Btree.Root);
+//		}
+//		int k = 0;
+//		while (k<Btree.Root.getNodeNumber()){
+//			System.out.print(Btree.Root.getNodes()[k].key+" ");
+//			k++;
+//		}
+		
+	}
+	
+	public static void childRead(Nodes parentNodes){
+		if (parentNodes.getChildNode()[0]!=null){
+			for (int j=0; j<parentNodes.getChildNode().length; j++){
+				if (parentNodes.getChildNode()[j] == null){
+					System.out.println();
+					return;
+				}
+				
+				Nodes currentNodes = parentNodes.getChildNode()[j];
+//				childRead(currentNodes);
+				
+				
+				int k = 0;
+				while (k<currentNodes.getNodeNumber()){
+					System.out.print(currentNodes.getNodes()[k].key+" ");
+					k++;
+				}
+				System.out.print("|");
+			}
+			System.out.println();
+		}
 	}
 }
