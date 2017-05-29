@@ -3,7 +3,6 @@ package Build;
 public final class Btree {
 	public static final int FAN_OUT = 3;
 	public static Nodes Root = new Nodes();
-	public static int nodeNumber = 0;
 	
 	private Btree(){}
 		
@@ -13,18 +12,17 @@ public final class Btree {
 			//add node
 			Root.add(node);
 		} else {
-			addNode(Root, compare(Root.getNodes(), Root.getChildNode(), node), node);
+			addNode(compare(Root.getNodes(), Root.getChildNode(), node), node);
 		}
-		nodeNumber++;
 	}
 	
-	public static void addNode(Nodes parent, Nodes current, Node node){
+	public static void addNode(Nodes current, Node node){
 		if (current.getChildNode()[0] == null){
 			current.add(node);
 		} else {
 			
 			//recursively look for correct child
-			//addNode(current, compare(current.getNodes(), current.getChildNode(), node), node);
+			addNode(compare(current.getNodes(), current.getChildNode(), node), node);
 			
 		}
 	}
@@ -32,7 +30,7 @@ public final class Btree {
 	//compare to find the child
 	public static Nodes compare(Node[] current, Nodes[] child, Node node){
 		int result = 0;
-		if (node.key >= current[result].key){
+		if (node.key > current[result].key){
 			for (int i=0; i<Btree.FAN_OUT; i++){
 				//check if there is no more child
 				if (child[i+1]==null){
@@ -41,7 +39,7 @@ public final class Btree {
 				
 				result = i+1;
 				
-				if (current[i].key <= node.key && node.key <= child[i+1].getNodes()[0].key){
+				if (node.key < child[result].getNodes()[0].key){
 					break;
 				}				
 			}
@@ -65,11 +63,11 @@ public final class Btree {
 		
 		//split child
 		if (current.getChildNodeNumber()!=0){
-			for (int i=0; i < current.getChildNodeNumber(); i++){
-				if (i <= current.getChildNodeNumber()/2){
+			for (int i=0; i < FAN_OUT+2; i++){
+				if (i <= Math.floor(FAN_OUT)/2){
 					temp.addChildNode(current.getChildNode()[i]);
 				}
-				if (i > current.getChildNodeNumber()/2){
+				if (i > Math.floor(FAN_OUT)/2){
 					branchNode.addChildNode(current.getChildNode()[i]);
 				}
 			}
@@ -78,18 +76,22 @@ public final class Btree {
 		//get the middle node
 		node = current.getNodes()[(int) Math.floor(FAN_OUT/2) + 1];
 		
+		
+		//push to parent nodes
+		if (current.getParentNode()==null){
+			Btree.Root.resetNodes();
+			Btree.Root.addChildNode(temp);
+			Btree.Root.addChildNode(branchNode);
+			Btree.Root.add(node);
+			return;
+		}
+		
 		//reuse node
 		current.resetNodes();
 		for (int i=0; i <= (int) Math.floor(FAN_OUT/2); i++){
 			current.add(temp.getNodes()[i]);
 			if (i < temp.getChildNodeNumber())
 				current.addChildNode(temp.getChildNode()[i]);
-		}
-		
-		//push to parent nodes
-		if (current.getParentNode()==null){
-			Btree.Root.resetNodes();
-			Btree.Root.addChildNode(current);
 		}
 		current.getParentNode().addChildNode(branchNode);
 		current.getParentNode().add(node);

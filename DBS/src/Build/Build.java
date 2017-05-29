@@ -60,39 +60,5 @@ public class Build {
 		
 		//write the last page to file
 		Page.finishPage();
-
-		
-//		for (int i=0; i<Btree.nodeNumber;i++){
-//			childRead(Btree.Root);
-//		}
-//		int k = 0;
-//		while (k<Btree.Root.getNodeNumber()){
-//			System.out.print(Btree.Root.getNodes()[k].key+" ");
-//			k++;
-//		}
-		
-	}
-	
-	public static void childRead(Nodes parentNodes){
-		if (parentNodes.getChildNode()[0]!=null){
-			for (int j=0; j<parentNodes.getChildNode().length; j++){
-				if (parentNodes.getChildNode()[j] == null){
-					System.out.println();
-					return;
-				}
-				
-				Nodes currentNodes = parentNodes.getChildNode()[j];
-//				childRead(currentNodes);
-				
-				
-				int k = 0;
-				while (k<currentNodes.getNodeNumber()){
-					System.out.print(currentNodes.getNodes()[k].key+" ");
-					k++;
-				}
-				System.out.print("|");
-			}
-			System.out.println();
-		}
 	}
 }
